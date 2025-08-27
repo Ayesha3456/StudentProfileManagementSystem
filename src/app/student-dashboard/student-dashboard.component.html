@@ -1,197 +1,207 @@
 <div class="container py-4 dashboard">
-    <!-- Heading -->
-    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
-      <h2 class="m-0">🎓 Student Dashboard</h2>
-  
-      <div class="filter-chip d-flex align-items-center gap-2">
-        <span class="badge bg-secondary">
-          Filter: {{ currentFilter }}
-        </span>
-        <button class="btn btn-outline-secondary btn-sm" (click)="clearFilter()">Clear</button>
+  <!-- Heading -->
+  <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+    <h2 class="m-0">🎓 Student Dashboard</h2>
+
+    <div class="filter-chip d-flex align-items-center gap-2">
+      <span class="badge bg-secondary">Filter: {{ currentFilter }}</span>
+      <button class="btn btn-outline-secondary btn-sm" (click)="clearFilter()">Clear</button>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card card-click" (click)="applyFilter('All')">
+        <div class="card-body text-center">
+          <div class="card-kpi">Total</div>
+          <div class="card-value">{{ totalCount }}</div>
+          <div class="card-sub">All (filtered)</div>
+        </div>
       </div>
     </div>
-  
-    <!-- Cards -->
-    <div class="row g-3 mb-3">
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card card-click" (click)="applyFilter('All')">
+
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card card-click" (click)="applyFilter('Present')">
+        <div class="card-body text-center">
+          <div class="card-kpi text-success">Present</div>
+          <div class="card-value text-success">{{ presentCount }}</div>
+          <div class="card-sub">Tap to show Present</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card card-click" (click)="applyFilter('Absent')">
+        <div class="card-body text-center">
+          <div class="card-kpi text-danger">Absent</div>
+          <div class="card-value text-danger">{{ absentCount }}</div>
+          <div class="card-sub">Tap to show Absent</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="d-flex gap-2 h-100">
+        <div class="card card-click flex-fill" (click)="applyFilter('School')">
           <div class="card-body text-center">
-            <div class="card-kpi">Total</div>
-            <div class="card-value">{{ totalCount }}</div>
-            <div class="card-sub">All (filtered)</div>
+            <div class="card-kpi">School</div>
+            <div class="card-sub">Filter</div>
           </div>
         </div>
-      </div>
-  
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card card-click" (click)="applyFilter('Present')">
+        <div class="card card-click flex-fill" (click)="applyFilter('College')">
           <div class="card-body text-center">
-            <div class="card-kpi text-success">Present</div>
-            <div class="card-value text-success">{{ presentCount }}</div>
-            <div class="card-sub">Tap to show Present</div>
-          </div>
-        </div>
-      </div>
-  
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card card-click" (click)="applyFilter('Absent')">
-          <div class="card-body text-center">
-            <div class="card-kpi text-danger">Absent</div>
-            <div class="card-value text-danger">{{ absentCount }}</div>
-            <div class="card-sub">Tap to show Absent</div>
-          </div>
-        </div>
-      </div>
-  
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="d-flex gap-2 h-100">
-          <div class="card card-click flex-fill" (click)="applyFilter('School')">
-            <div class="card-body text-center">
-              <div class="card-kpi">School</div>
-              <div class="card-sub">Filter</div>
-            </div>
-          </div>
-          <div class="card card-click flex-fill" (click)="applyFilter('College')">
-            <div class="card-body text-center">
-              <div class="card-kpi">College</div>
-              <div class="card-sub">Filter</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Chart -->
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h5 class="m-0">Attendance (Filtered)</h5>
-          <small class="text-muted">Donut shows Present vs Absent</small>
-        </div>
-        <div id="attendanceDonut" class="d-flex justify-content-center"></div>
-      </div>
-    </div>
-  
-    <!-- Add Student -->
-    <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="mb-3">Add Student</h5>
-        <form (ngSubmit)="addStudent()" class="row g-2">
-          <div class="col-md-6">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Student name"
-              [(ngModel)]="addForm.name"
-              name="name"
-              required />
-          </div>
-          <div class="col-md-4">
-            <select class="form-select" [(ngModel)]="addForm.type" name="type">
-              <option value="School">School</option>
-              <option value="College">College</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Add</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  
-    <!-- Table -->
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h5 class="m-0">Students ({{ filteredStudents.length }})</h5>
-          <button class="btn btn-outline-secondary btn-sm" (click)="applyFilter(currentFilter)">Refresh</button>
-        </div>
-  
-        <div class="table-responsive">
-          <table class="table table-hover align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Attendance</th>
-                <th style="width:180px;">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngIf="filteredStudents.length === 0">
-                <td colspan="5" class="text-center text-muted py-4">
-                  No data available
-                </td>
-              </tr>
-  
-              <tr *ngFor="let s of filteredStudents; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ s.name }}</td>
-                <td>
-                  <span class="badge" [ngClass]="s.type === 'School' ? 'bg-info' : 'bg-warning text-dark'">
-                    {{ s.type }}
-                  </span>
-                </td>
-                <td>
-                  <select class="form-select form-select-sm w-auto"
-                          [(ngModel)]="s.attendance"
-                          (change)="onAttendanceChange(s, s.attendance)">
-                    <option value="Present">Present</option>
-                    <option value="Absent">Absent</option>
-                  </select>
-                </td>
-                <td>
-                  <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-outline-primary" (click)="openEdit(s)">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger" (click)="deleteStudent(s.id)">Delete</button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-  
-      </div>
-    </div>
-  
-    <!-- Edit Modal (no Bootstrap JS required) -->
-    <div class="modal-backdrop" *ngIf="showEditModal" [class.is-exiting]="modalClosing" (click)="cancelEdit()"></div>
-    <div class="modal-shell" *ngIf="showEditModal" [class.is-exiting]="modalClosing" (click)="cancelEdit()">
-      <div class="modal-card" (click)="$event.stopPropagation()">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="m-0">Edit Student</h5>
-          <button class="btn-close" (click)="cancelEdit()"></button>
-        </div>
-  
-        <div *ngIf="editModel">
-          <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input class="form-control" [(ngModel)]="editModel.name" name="editName" />
-          </div>
-  
-          <div class="mb-3">
-            <label class="form-label">Type</label>
-            <select class="form-select" [(ngModel)]="editModel.type" name="editType">
-              <option value="School">School</option>
-              <option value="College">College</option>
-            </select>
-          </div>
-  
-          <div class="mb-4">
-            <label class="form-label">Attendance</label>
-            <select class="form-select" [(ngModel)]="editModel.attendance" name="editAttendance">
-              <option value="Present">Present</option>
-              <option value="Absent">Absent</option>
-            </select>
-          </div>
-  
-          <div class="d-flex justify-content-end gap-2">
-            <button class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
-            <button class="btn btn-primary" (click)="saveEdit()">Save</button>
+            <div class="card-kpi">College</div>
+            <div class="card-sub">Filter</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+
+  <!-- Donut Chart -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="m-0">Attendance (Filtered)</h5>
+        <small class="text-muted">Donut shows Present vs Absent</small>
+      </div>
+      <div #attendanceDonut id="attendanceDonut" class="d-flex justify-content-center"></div>
+    </div>
+  </div>
+
+  <!-- Add Student -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="mb-3">Add Student</h5>
+      <form (ngSubmit)="addStudent()" class="row g-2">
+        <div class="col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Student name"
+            [(ngModel)]="addForm.name"
+            name="name"
+            required />
+        </div>
+        <div class="col-md-4">
+          <select class="form-select" [(ngModel)]="addForm.type" name="type">
+            <option value="School">School</option>
+            <option value="College">College</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary w-100">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="m-0">Students ({{ filteredStudents.length }})</h5>
+        <button class="btn btn-outline-secondary btn-sm" (click)="applyFilter(currentFilter)">Refresh</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Attendance</th>
+              <th style="width:180px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="filteredStudents.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">No data available</td>
+            </tr>
+
+            <tr *ngFor="let s of filteredStudents; let i = index; trackBy: trackById">
+              <td>{{ i + 1 }}</td>
+              <td><span class="badge bg-dark">{{ s.uid }}</span></td>
+              <td>{{ s.name }}</td>
+              <td>
+                <span class="badge" [ngClass]="s.type === 'School' ? 'bg-info' : 'bg-warning text-dark'">
+                  {{ s.type }}
+                </span>
+              </td>
+              <td>
+                <select class="form-select form-select-sm w-auto"
+                        [(ngModel)]="s.attendance"
+                        name="att-{{s.id}}"
+                        (change)="onAttendanceChange(s, s.attendance)">
+                  <option value="Present">Present</option>
+                  <option value="Absent">Absent</option>
+                </select>
+              </td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary" (click)="openEdit(s)">Edit</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteStudent(s.id)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-backdrop" *ngIf="showEditModal" [class.is-exiting]="modalClosing" (click)="cancelEdit()"></div>
+  <div class="modal-shell" *ngIf="showEditModal" [class.is-exiting]="modalClosing" (click)="cancelEdit()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="m-0">Edit Student</h5>
+        <button class="btn-close" (click)="cancelEdit()"></button>
+      </div>
+
+      <div *ngIf="editModel">
+        <div class="mb-3">
+          <label class="form-label">ID</label>
+          <input class="form-control" [value]="editModel.uid" disabled />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input class="form-control"
+                 [(ngModel)]="editModel.name"
+                 name="editName"
+                 required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Type</label>
+          <select class="form-select"
+                  [(ngModel)]="editModel.type"
+                  name="editType">
+            <option value="School">School</option>
+            <option value="College">College</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Attendance</label>
+          <select class="form-select"
+                  [(ngModel)]="editModel.attendance"
+                  name="editAttendance">
+            <option value="Present">Present</option>
+            <option value="Absent">Absent</option>
+          </select>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
+          <button class="btn btn-primary" (click)="saveEdit()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

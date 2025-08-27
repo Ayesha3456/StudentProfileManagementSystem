@@ -1,115 +1,78 @@
-/* Dashboard Enhancements */
-.dashboard {
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    color: #2d3436;
-  }
-  
-  .dashboard h2 {
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: #1a202c;
-  }
-  
-  /* Cards */
-  .card-click {
-    cursor: pointer;
-    transition: all 0.25s ease;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #ffffff, #f8f9fa);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0,0,0,0.05);
-  }
-  .card-click:hover {
-    transform: translateY(-6px) scale(1.03);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* KPI text */
-  .card-kpi {
-    font-weight: 600;
-    font-size: 1rem;
-    opacity: 0.85;
-  }
-  .card-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #111827;
-    margin: 0.2rem 0;
-  }
-  .card-sub {
-    font-size: 0.85rem;
-    opacity: 0.7;
-  }
-  
-  /* Chart Holder */
-  #attendanceDonut svg {
-    max-width: 320px;
-    height: auto;
-  }
-  
-  /* Table */
-  .table {
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .table thead {
-    background: #f1f5f9;
-    font-weight: 600;
-    color: #374151;
-  }
-  .table-hover tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.06);
-  }
-  .table tbody tr:nth-child(even) {
-    background: #fafafa;
-  }
-  
-  /* Filter chip */
-  .filter-chip {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 0.45rem 0.9rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-  
-  /* Modal */
-  .modal-card {
-    border-radius: 18px;
-    padding: 1.5rem 1.75rem;
-    background: #fff;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
-  }
-  .modal-card h5 {
-    font-weight: 600;
-  }
-  
-  /* Animations smoother */
-  @keyframes scaleUp {
-    from { transform: scale(0.85); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-  @keyframes scaleDown {
-    from { transform: scale(1); opacity: 1; }
-    to { transform: scale(0.85); opacity: 0; }
-  }
-  
-  /* Badges */
-  .badge {
-    font-size: 0.78rem;
-    padding: 0.45em 0.65em;
-    border-radius: 10px;
-    font-weight: 500;
-  }
-  
-  /* Buttons */
-  .btn {
-    border-radius: 10px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  .btn:hover {
-    transform: translateY(-1px);
-  }
-  
+/* Layout polish */
+.dashboard .card {
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.card-click {
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card-click:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+}
+
+.card-kpi {
+  font-size: 0.9rem;
+  opacity: .8;
+}
+.card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.card-sub {
+  font-size: .85rem;
+  color: #6c757d;
+}
+
+/* Donut container height helper */
+#attendanceDonut {
+  min-height: 240px;
+}
+
+/* Modal (framework-agnostic; no Bootstrap JS required) */
+.modal-backdrop,
+.modal-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+}
+
+.modal-backdrop {
+  background: rgba(0,0,0,.45);
+  opacity: 1;
+  transition: opacity .25s ease;
+}
+
+.modal-shell {
+  display: grid;
+  place-items: center;
+  pointer-events: none; /* clicks pass unless on card */
+}
+
+.modal-card {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 520px;
+  background: #fff;
+  color: #111;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform .25s ease, opacity .25s ease;
+}
+
+/* Exit animation */
+.is-exiting + .modal-card,
+.modal-shell.is-exiting .modal-card {
+  transform: translateY(10px);
+  opacity: 0;
+}
+.modal-backdrop.is-exiting {
+  opacity: 0;
+}
